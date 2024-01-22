@@ -15,15 +15,18 @@ class MerchantController extends Controller
 
     public function create()
     {
-        return view('merchants.create');
+        return view('merchants_views.create');
     }
 
     public function store(Request $request)
     {
         // Validate the request
+        // dd($request->all());
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:merchants,email',
+            'phone_number'=>'required|regex:/^\d{3}-\d{3}-\d{4}?$/',
+            'address'=>'required|string|max:500',
             // Add other validation rules as needed
         ]);
 
@@ -35,14 +38,16 @@ class MerchantController extends Controller
 
     public function show($id)
     {
+        
         $merchant = Merchant::findOrFail($id);
-        return view('merchants.show', compact('merchant'));
+        return view('merchants_views.show', compact('merchant'));
     }
 
     public function edit($id)
     {
+    
         $merchant = Merchant::findOrFail($id);
-        return view('merchants.edit', compact('merchant'));
+        return view('merchants_views.update', compact('merchant'));
     }
 
     public function update(Request $request, $id)
@@ -50,8 +55,9 @@ class MerchantController extends Controller
         // Validate the request
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:merchants,email,'.$id,
-            // Add other validation rules as needed
+            'email' => 'required|email|unique:merchants,email',
+            'phone_number'=>'required|regex:/^\d{3}-\d{3}-\d{4}?$/',
+            'address'=>'required|string|max:500',
         ]);
 
         // Update the merchant
